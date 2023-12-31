@@ -16,14 +16,14 @@ export class UsersService {
         return this.usersRepository.find();
     }
 
-    findOne(username): Promise<Users> {
-        return this.usersRepository.findOneBy({ username });
+    findOne(email): Promise<Users> {
+        return this.usersRepository.findOneBy({ email });
     }
 
-    createUser({ name, username, password }): Promise<Users> {
+    createUser({ name, email, password }): Promise<Users> {
         const user = new Users();
         user.name = name;
-        user.username = username;
+        user.email = email;
         user.password = hashSync(password, this.saltOrRound);
         return this.usersRepository.save(user);
     }
