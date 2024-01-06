@@ -12,6 +12,10 @@ export class Users {
     name: string;
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     login_time: Date;
+    @Column({ default: false })
+    is_deleted: boolean;
+    @Column({ default: false })
+    is_verified: boolean;
     @Column({ default: '' })
     verification_token: string;
 }
