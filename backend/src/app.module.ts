@@ -15,7 +15,7 @@ import { EmailModule } from './email/email.module';
             type: 'mysql',
             host: process.env.HOST,
             port: Number(process.env.PORT),
-            username: process.env.USER,
+            username: process.env.USERNAME,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             entities: [Users],
