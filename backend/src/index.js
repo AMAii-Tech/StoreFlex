@@ -1,6 +1,9 @@
 const express = require("express");
 const database = require("./modules/database");
+const router = require('./modules/routes');
+
 const app = express();
+
 const sqlCredentials = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -11,10 +14,6 @@ const sqlCredentials = {
 database.connect(sqlCredentials);
 
 app.use(express.json());
-
-app.get("/", async (req, res) => {
-    const data = await database.listData({ source: "users" });
-    res.send(data);
-});
+app.use("/", router);
 
 app.listen(4005, console.log("Started on Port 4005"));
