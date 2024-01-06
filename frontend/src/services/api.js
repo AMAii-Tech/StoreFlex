@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:5000";
+const baseUrl = "http://localhost:4005";
 axios.defaults.baseURL = baseUrl;
 export const apiList = {
     loginAPI: "/auth/login",
