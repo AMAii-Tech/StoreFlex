@@ -9,5 +9,15 @@ export const apiList = {
 
 export const makeRequest = ({ controller, body, method }) => {
     const url = baseUrl + controller;
-    return axios({ url, method, data: body }).catch(console.error);
+    return axios({ url, method, data: body })
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            return error;
+        });
+};
+
+export const setBearerToken = (accessToken) => {
+    axios.defaults.headers.common = { Authorization: `Bearer ${accessToken}` };
 };

@@ -11,7 +11,7 @@ import { Users } from './users/users.entity';
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot({
-            type: 'mssql',
+            type: 'mysql',
             host: process.env.HOST,
             port: Number(process.env.PORT),
             username: process.env.USER,
@@ -19,10 +19,6 @@ import { Users } from './users/users.entity';
             database: process.env.DATABASE,
             entities: [Users],
             synchronize: true,
-            options: {
-                encrypt: true,
-                trustServerCertificate: true,
-            },
         }),
         AuthModule,
         ConfigModule.forRoot({

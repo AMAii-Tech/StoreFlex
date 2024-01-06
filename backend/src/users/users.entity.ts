@@ -13,5 +13,5 @@ export class Users {
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     login_time: Date;
     @Column({ default: '' })
-    access_token: string;
+    verification_token: string;
 }

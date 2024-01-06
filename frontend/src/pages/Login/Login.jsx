@@ -1,12 +1,15 @@
 import { useState } from "react";
 import "./Login.css";
-import { apiList, makeRequest } from "../../services/api.js";
+import { apiList, makeRequest, setBearerToken } from "../../services/api.js";
 import swal from "sweetalert";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../utils/slices/authSlice.js";
 const Login = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+    const dispatch = useDispatch();
     const handleSwitchButton = () => {
         setIsSignUp(!isSignUp);
     };
@@ -16,7 +19,13 @@ const Login = () => {
             controller: apiList.loginAPI,
             body: { email: email, password: password },
             method: "POST",
-        }).then((response) => console.log(response));
+        }).then((response) => {
+            if (response.status === 200) {
+                const data = response.data;
+                setBearerToken(data.accessToken);
+                dispatch(setUser(data));
+            }
+        });
     };
 
     const handleSignUpFormSubmit = (e) => {
