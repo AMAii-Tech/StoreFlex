@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { Users } from './users/users.entity';
+import { EmailModule } from './email/email.module';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { Users } from './users/users.entity';
             isGlobal: true,
         }),
         UsersModule,
+        EmailModule,
     ],
     controllers: [AppController],
     providers: [AppService],

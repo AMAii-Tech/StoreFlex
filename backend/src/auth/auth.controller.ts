@@ -7,6 +7,7 @@ import {
     UseGuards,
     Get,
     Request,
+    Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
@@ -35,5 +36,10 @@ export class AuthController {
     @Get('profile')
     getProfile(@Request() req) {
         return req.user;
+    }
+
+    @Get('/verify')
+    verifyUser(@Query('token') token: string) {
+        return this.authService.verifyUser(token);
     }
 }

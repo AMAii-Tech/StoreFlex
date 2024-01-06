@@ -25,6 +25,19 @@ export class UsersService {
         user.name = name;
         user.email = email;
         user.password = hashSync(password, this.saltOrRound);
+        user.verification_token = hashSync(email, this.saltOrRound);
+        return this.usersRepository.save(user);
+    }
+
+    async activateUser(token): Promise<Users> {
+        const user = await this.usersRepository.findOneBy({
+            verification_token: token,
+        });
+        if (!user) {
+            return null;
+        }
+        user.is_verified = true;
+        user.verification_token = '';
         return this.usersRepository.save(user);
     }
 }
