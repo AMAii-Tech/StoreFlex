@@ -15,12 +15,12 @@ import { users } from 'src/_mock/user';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
-import TableNoData from '../table-no-data';
+import NoData from './NoData';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
+import { applyFilter, getComparator } from '../../sections/user/utils';
 
 export default function UserPage() {
   const [page, setPage] = useState(0);
@@ -145,12 +145,9 @@ export default function UserPage() {
                     />
                   ))}
 
-                <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
-                />
+                <TableEmptyRows height={77} />
 
-                {notFound && <TableNoData query={filterName} />}
+                {notFound && <NoData query={filterName} />}
               </TableBody>
             </Table>
           </TableContainer>

@@ -12,8 +12,6 @@ import PostCard from '../post-card';
 import PostSort from '../post-sort';
 import PostSearch from '../post-search';
 
-// ----------------------------------------------------------------------
-
 export default function BlogView() {
   return (
     <Container>
