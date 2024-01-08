@@ -19,14 +19,11 @@ class Database {
      */
     async listData({ source, where, sort, start, limit }) {
         let query = this._getSelectStatement(source);
-        if (where?.length === 0) query += this._addWhereStatement(where);
+        if (where?.length > 0) query += this._addWhereStatement(where);
         if (sort) query += ` ORDER BY ${sort}`;
-        query += ` LIMIT ${start}, ${limit}`;
+        //query += ` LIMIT ${start}, ${limit}`;
         const promisePool = this._pool.promise();
-        const [rows] = await promisePool.query(
-            query,
-            this._whereValuesArray
-        );
+        const [rows] = await promisePool.query(query, this._whereValuesArray);
         return { rows };
     }
 
@@ -37,12 +34,12 @@ class Database {
      * greater than 0, it returns `{ success: true }`. Otherwise, it returns `{ success: false, error
      * }`, where `error` is a variable that is not defined in the code snippet provided.
      */
-    async insertData({ source, ...values }) {
+    async insertData({ source, values }) {
         let query = this._getInsertStatement({ source, values });
         const promisePool = this._pool.promise();
         const [ResultSetHeader] = await promisePool.query(query);
         if (ResultSetHeader.affectedRows > 0) {
-            return { success: true }
+            return { success: true };
         } else {
             return { success: false, error };
         }
@@ -61,7 +58,7 @@ class Database {
         const promisePool = this._pool.promise();
         const [ResultSetHeader] = await promisePool.query(query);
         if (ResultSetHeader.affectedRows > 0) {
-            return { success: true }
+            return { success: true };
         } else {
             return { success: false, error };
         }
@@ -80,7 +77,7 @@ class Database {
         const promisePool = this._pool.promise();
         const [ResultSetHeader] = await promisePool.query(query);
         if (ResultSetHeader.affectedRows > 0) {
-            return { success: true }
+            return { success: true };
         } else {
             return { success: false, error };
         }
@@ -101,7 +98,15 @@ class Database {
      * @returns an SQL INSERT statement.
      */
     _getInsertStatement({ source, values }) {
-        return "INSERT INTO " + source + ` (${Object.keys(values).map(ele => ele).join()}) VALUES (${Object.values(values).map(ele => `"${ele}"`).join()})`;
+        return (
+            "INSERT INTO " +
+            source +
+            ` (${Object.keys(values)
+                .map((ele) => ele)
+                .join()}) VALUES (${Object.values(values)
+                .map((ele) => `"${ele}"`)
+                .join()})`
+        );
     }
 
     /**
@@ -110,7 +115,13 @@ class Database {
      * to 1 for the row where the "idProperty" column matches the provided "id" value.
      */
     _getDeleteStatement({ source, id, idProperty }) {
-        return "UPDATE " + source + " SET is_deleted = 1 WHERE " + idProperty + ` = ${id}`;
+        return (
+            "UPDATE " +
+            source +
+            " SET is_deleted = 1 WHERE " +
+            idProperty +
+            ` = ${id}`
+        );
     }
 
     /**
@@ -123,7 +134,9 @@ class Database {
             .filter(([key]) => key !== idProperty)
             .map(([key, value]) => `${key} = "${value}"`);
 
-        const updateQuery = `UPDATE ${source} SET ${updateArr.join(', ')} WHERE ${idProperty} = "${values[idProperty]}";`;
+        const updateQuery = `UPDATE ${source} SET ${updateArr.join(
+            ", "
+        )} WHERE ${idProperty} = "${values[idProperty]}";`;
         return updateQuery;
     }
 
