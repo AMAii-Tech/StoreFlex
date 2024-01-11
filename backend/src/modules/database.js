@@ -21,7 +21,7 @@ class Database {
         let query = this._getSelectStatement(source);
         if (where?.length > 0) query += this._addWhereStatement(where);
         if (sort) query += ` ORDER BY ${sort}`;
-        //query += ` LIMIT ${start}, ${limit}`;
+        if (start && limit) query += ` LIMIT ${start}, ${limit}`;
         const promisePool = this._pool.promise();
         const [rows] = await promisePool.query(query, this._whereValuesArray);
         return { rows };
@@ -53,8 +53,9 @@ class Database {
      * the "success" property will be set to false and the "error" property will be included in the
      * returned object.
      */
-    async deleteData({ source, id, idProperty }) {
-        let query = this._getDeleteStatement({ source, id, idProperty });
+    async deleteData({ source, where }) {
+        let query =
+            this._getDeleteStatement(source) + this._addWhereStatement(where);
         const promisePool = this._pool.promise();
         const [ResultSetHeader] = await promisePool.query(query);
         if (ResultSetHeader.affectedRows > 0) {
@@ -67,13 +68,15 @@ class Database {
     /**
      * The function `updateData` updates data in a database table based on the provided source,
      * idProperty, and values, and returns a success status.
-     * @returns The function `updateData` returns an object. If the `ResultSetHeader.affectedRows` is
+     * @returns {object} The function `updateData` returns an object. If the `ResultSetHeader.affectedRows` is
      * greater than 0, it returns an object with the property `success` set to `true`. Otherwise, it
      * returns an object with the properties `success` set to `false` and `error` (which is not defined
      * in the code snippet).
      */
-    async updateData({ source, idProperty, ...values }) {
-        let query = this._getUpdateStatement({ source, idProperty, values });
+    async updateData({ source, where, values }) {
+        let query =
+            this._getUpdateStatement({ source, idProperty, values }) +
+            this._addWhereStatement(where);
         const promisePool = this._pool.promise();
         const [ResultSetHeader] = await promisePool.query(query);
         if (ResultSetHeader.affectedRows > 0) {
@@ -85,9 +88,9 @@ class Database {
 
     /**
      * The function returns a SELECT statement that selects all columns from a given source.
-     * @param source - The source parameter is a string that represents the name of the table or data
+     * @param {string} source - The source parameter is a string that represents the name of the table or data
      * source from which you want to retrieve data.
-     * @returns a SQL SELECT statement that selects all columns from the specified source table.
+     * @returns {string} a SQL SELECT statement that selects all columns from the specified source table.
      */
     _getSelectStatement(source) {
         return "SELECT * FROM " + source;
@@ -95,7 +98,7 @@ class Database {
 
     /**
      * The function returns an SQL INSERT statement based on the provided source table and values.
-     * @returns an SQL INSERT statement.
+     * @returns {string} an SQL INSERT statement.
      */
     _getInsertStatement({ source, values }) {
         return (
@@ -111,17 +114,11 @@ class Database {
 
     /**
      * The function returns a SQL update statement to mark a record as deleted in a given table.
-     * @returns an SQL statement that updates a table named "source" by setting the "is_deleted" column
+     * @returns {string} an SQL statement that updates a table named "source" by setting the "is_deleted" column
      * to 1 for the row where the "idProperty" column matches the provided "id" value.
      */
-    _getDeleteStatement({ source, id, idProperty }) {
-        return (
-            "UPDATE " +
-            source +
-            " SET is_deleted = 1 WHERE " +
-            idProperty +
-            ` = ${id}`
-        );
+    _getDeleteStatement(source) {
+        return `UPDATE ${source} SET IsDeleted = 1`;
     }
 
     /**
@@ -129,14 +126,12 @@ class Database {
      * values.
      * @returns an SQL update statement.
      */
-    _getUpdateStatement({ source, idProperty, values }) {
+    _getUpdateStatement({ source, values }) {
         const updateArr = Object.entries(values)
             .filter(([key]) => key !== idProperty)
             .map(([key, value]) => `${key} = "${value}"`);
 
-        const updateQuery = `UPDATE ${source} SET ${updateArr.join(
-            ", "
-        )} WHERE ${idProperty} = "${values[idProperty]}";`;
+        const updateQuery = `UPDATE ${source} SET ${updateArr.join(", ")};`;
         return updateQuery;
     }
 
