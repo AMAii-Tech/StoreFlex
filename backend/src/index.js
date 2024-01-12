@@ -1,10 +1,10 @@
 const express = require("express");
 const database = require("./modules/database");
-const router = require("./modules/routes");
 const session = require("express-session");
 const passport = require("passport");
 const MySQLStore = require("express-mysql-session")(session);
 const authRoute = require("./routes/auth");
+const businessRoute = require("./routes/business-route");
 const app = express();
 require("./utils/localStrategy");
 
@@ -38,6 +38,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoute);
-app.use("/", router);
+app.use("/", businessRoute);
 
 app.listen(4005, console.log("Started on Port 4005"));
