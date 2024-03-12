@@ -2,10 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import TableCell from '@mui/material/TableCell';
 
-// import { Grid } from '@amaii/ui-framework';
-
-import Label from 'src/components/label';
-
+import Label from '../components/label';
 import GridComponent from '../components/grid';
 
 const userheadLabel = [

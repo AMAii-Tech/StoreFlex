@@ -1,26 +1,22 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@amaii/ui-framework';
+// import { Grid } from '@amaii/ui-framework';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-// import TablePagination from '@mui/material/TablePagination';
 
-// import NoData from './NoData';
-
+import Grid from './GridComp';
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 import GridTableToolbar from './GridTableToolBar';
 
 export default function GridComponent({ title, data }) {
-  // const [page, setPage] = useState(0);
   const [filterName, setFilterName] = useState('');
 
   const handleFilterByName = (event) => {
-    // setPage(0);
     setFilterName(event.target.value);
   };
 
