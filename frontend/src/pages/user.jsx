@@ -1,73 +1,39 @@
-import { Helmet } from 'react-helmet-async';
+import UIModel from '../components/ui-model';
 
-import TableCell from '@mui/material/TableCell';
+// TODO: Need to Update the title of the tab using Helmet
 
-import Label from '../components/label';
-import GridComponent from '../components/grid';
+const userModel = new UIModel({
+  title: 'Users',
+  columns: [
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: 'firstName',
+      headerName: 'First name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'age',
+      headerName: 'Age',
+      type: 'number',
+      width: 110,
+      editable: true,
+    },
+    {
+      field: 'fullName',
+      headerName: 'Full name',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    },
+  ],
+});
 
-const userheadLabel = [
-  { id: 'name', label: 'Name' },
-  { id: 'company', label: 'Company' },
-  { id: 'role', label: 'Role' },
-  {
-    id: 'isVerified',
-    label: 'Verified',
-    align: 'center',
-    customRender: ({ value }) =>
-      value === 1 ? (
-        <TableCell align="center">Yes</TableCell>
-      ) : (
-        <TableCell align="center">No</TableCell>
-      ),
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    customRender: ({ value }) => (
-      <TableCell>
-        <Label color={(value === 'banned' && 'error') || 'success'}>{value}</Label>
-      </TableCell>
-    ),
-  },
-  { id: '' },
-];
-
-const userData = [
-  {
-    id: 1,
-    name: 'Tushar',
-    company: 'Spraxa',
-    role: 'Developer',
-    isVerified: 1,
-    status: 'active',
-  },
-  {
-    id: 2,
-    name: 'Rohan',
-    company: 'Spraxa',
-    role: 'Developer',
-    isVerified: 0,
-    status: 'active',
-  },
-  {
-    id: 3,
-    name: 'Pawan',
-    company: 'Spraxa',
-    role: 'Developer',
-    isVerified: 1,
-    status: 'active',
-  },
-];
-
-export default function UserPage() {
-  return (
-    <>
-      <Helmet>
-        <title> User | Minimal UI </title>
-      </Helmet>
-
-      {/* <Grid /> */}
-      <GridComponent title="User" headLabel={userheadLabel} data={userData} />
-    </>
-  );
-}
+export default userModel;

@@ -54,3 +54,23 @@ export function applyFilter({ inputData, comparator, filterName }) {
 
   return inputData;
 }
+
+export function convertToSingular(str) {
+  if (str.charAt(str.length - 1) === 's') {
+    return str.slice(0, -1);
+  }
+  return str;
+}
+
+export const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  boxShadow: 24,
+  borderRadius: 2,
+  p: 4,
+};
